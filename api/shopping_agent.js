@@ -1007,10 +1007,7 @@ const shoppingAgent = {
 
 export default function handler(req, res) {
   if (req.method === "GET") {
-    return res.status(200).json({
-      name: "virtualShoppingAgent",
-      description: "Helps users choose products based on their needs, style preferences, or budget."
-    });
+    return res.status(200).json(shoppingAgent);
   }
 
   if (req.method === "POST") {
