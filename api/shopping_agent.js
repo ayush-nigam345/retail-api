@@ -1003,9 +1003,9 @@ const shoppingAgent = {
   ]
 }
 
-// import productCatalog from "@/data/productCatalog"; // Ensure this is an array of products with categories, price, style, etc.
+// import shopping_agent from "@/data/shopping_agent"; // Ensure this is an array of products with categories, price, style, etc.
 
-export default function handler(req, res) {
+export default function handler(req, res) { 
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Only GET requests are allowed." });
   }
@@ -1016,7 +1016,7 @@ export default function handler(req, res) {
     return res.status(400).json({ error: "Missing 'category' query parameter." });
   }
 
-  const matches = productCatalog.filter(item =>
+  const matches = shoppingAgent.filter(item =>
     item.category.toLowerCase() === category.toLowerCase()
   );
 
