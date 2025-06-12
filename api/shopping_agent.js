@@ -1003,7 +1003,7 @@ const shoppingAgent = {
   ]
 }
 
-import productCatalog from "@/data/productCatalog"; // Ensure this is an array of products with categories, price, style, etc.
+// import productCatalog from "@/data/productCatalog"; // Ensure this is an array of products with categories, price, style, etc.
 
 export default function handler(req, res) {
   if (req.method === "GET") {
@@ -1022,7 +1022,7 @@ export default function handler(req, res) {
       });
     }
 
-    const matchedProducts = productCatalog.filter(product => {
+    const matchedProducts = shoppingAgent.filter(product => {
       const typeMatch = productType.includes(product.category);
       const styleMatch = style ? product.style?.toLowerCase() === style.toLowerCase() : true;
       const budgetMatch = checkBudgetRange(product.price, budget);
