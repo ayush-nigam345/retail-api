@@ -1006,60 +1006,23 @@ const shoppingAgent = {
 // import productCatalog from "@/data/productCatalog"; // Ensure this is an array of products with categories, price, style, etc.
 
 export default function handler(req, res) {
-  if (req.method === "GET") {
-    return res.status(200).json(shoppingAgent);
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Only GET requests are allowed." });
   }
 
-  if (req.method === "POST") {
-    const { productType, style, budget } = req.body;
+  const { category } = req.query;
 
-    if (!productType || !Array.isArray(productType) || !budget) {
-      return res.status(400).json({
-        error: "Missing required fields. 'productType' (array) and 'budget' (string) are required."
-      });
-    }
-
-    const matchedProducts = shoppingAgent.filter(product => {
-      const typeMatch = productType.includes(product.category);
-      const styleMatch = style ? product.style?.toLowerCase() === style.toLowerCase() : true;
-      const budgetMatch = checkBudgetRange(product.price, budget);
-      return typeMatch && styleMatch && budgetMatch;
-    });
-
-    if (matchedProducts.length === 0) {
-      return res.status(404).json({
-        error: "No matching products found for the provided preferences."
-      });
-    }
-
-    const recommendedProduct = matchedProducts[0];
-    const alternatives = matchedProducts.slice(1, 4).map(p => p.name);
-
-    return res.status(200).json({
-      recommendedProduct: recommendedProduct.name,
-      justification: `This ${recommendedProduct.category} matches your ${style || "general"} style and fits within your budget of ${budget}.`,
-      alternativeSuggestions: alternatives
-    });
+  if (!category) {
+    return res.status(400).json({ error: "Missing 'category' query parameter." });
   }
 
-  return res.status(405).json({ error: "Method not allowed" });
-}
+  const matches = productCatalog.filter(item =>
+    item.category.toLowerCase() === category.toLowerCase()
+  );
 
-// Helper to parse budget string ranges like "$200-$500"
-function checkBudgetRange(price, budget) {
-  const rangeMatch = budget.match(/\$?(\d+)\s*-\s*\$?(\d+)/);
-  const underMatch = budget.match(/under\s*\$?(\d+)/i);
-
-  if (rangeMatch) {
-    const min = parseFloat(rangeMatch[1]);
-    const max = parseFloat(rangeMatch[2]);
-    return price >= min && price <= max;
+  if (matches.length === 0) {
+    return res.status(404).json({ error: `No items found in category '${category}'.` });
   }
 
-  if (underMatch) {
-    const max = parseFloat(underMatch[1]);
-    return price <= max;
-  }
-
-  return true; // Fallback: match all
+  return res.status(200).json(matches);
 }
