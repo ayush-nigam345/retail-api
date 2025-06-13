@@ -1006,10 +1006,11 @@ const shoppingAgent =
 
 export default function handler(req, res) {
   try {
-    if (req.method !== "GET") {
-      return res.status(405).json({ error: "Only GET is allowed." });
+    if (req.method === "GET") {
+      return res.status(200).json(shoppingAgent);
     }
 
+    if(req.method === "POST") {
     const { category } = req.query;
 
     if (!category) {
@@ -1025,6 +1026,7 @@ export default function handler(req, res) {
     }
 
     return res.status(200).json(matches);
+  }
   } catch (error) {
     console.error("API Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
