@@ -1011,7 +1011,7 @@ export default function handler(req, res) {
     }
 
     if(req.method === "POST") {
-    const { category } = req.query;
+    const { category } = req.body;
 
     if (!category) {
       return res.status(400).json({ error: "Missing category parameter." });
