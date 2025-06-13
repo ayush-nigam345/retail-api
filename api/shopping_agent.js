@@ -1,5 +1,5 @@
-const shoppingAgent = {
-  "items": [
+const shoppingAgent =
+   [
     {
       "id": 1,
       "name": "Hundred",
@@ -1001,7 +1001,6 @@ const shoppingAgent = {
       "in_stock": false
     }
   ]
-}
 
 // import shopping_agent from "@/data/shopping_agent"; // Ensure this is an array of products with categories, price, style, etc.
 
