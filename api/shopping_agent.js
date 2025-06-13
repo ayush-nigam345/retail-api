@@ -1004,26 +1004,30 @@ const shoppingAgent =
 
 // import shopping_agent from "@/data/shopping_agent"; // Ensure this is an array of products with categories, price, style, etc.
 
-export default function handler(req, res) { 
-  if (req.method === "GET") {
-    return res.status(200).json(shoppingAgent);
+export default function handler(req, res) {
+  try {
+    if (req.method !== "GET") {
+      return res.status(405).json({ error: "Only GET is allowed." });
+    }
+
+    const { category } = req.query;
+
+    if (!category) {
+      return res.status(400).json({ error: "Missing category parameter." });
+    }
+
+    const matches = shoppingAgent.filter(
+      (item) => item.category?.toLowerCase() === category.toLowerCase()
+    );
+
+    if (matches.length === 0) {
+      return res.status(404).json({ error: `No products found in category '${category}'.` });
+    }
+
+    return res.status(200).json(matches);
+  } catch (error) {
+    console.error("API Error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
-
-  if(req.method === "POST") {
-  const { category } = req.body;
-
-  if (!category) {
-    return res.status(400).json({ error: "Missing 'category' query parameter." });
-  }
-
-  const matches = shoppingAgent.filter(item =>
-    item.category.toLowerCase() === category.toLowerCase()
-  );
-
-  if (matches.length === 0) {
-    return res.status(404).json({ error: `No items found in category '${category}'.` });
-  }
-
-  return res.status(200).json(matches);
 }
-}
+
