@@ -1006,11 +1006,10 @@ const shoppingAgent = {
 // import shopping_agent from "@/data/shopping_agent"; // Ensure this is an array of products with categories, price, style, etc.
 
 export default function handler(req, res) { 
-  if (req.method === "GET") {
-    return res.status(200).json(shoppingAgent);
-  }
-
-  if(req.method === "POST") {
+  // if (req.method === "GET") {
+  //   return res.status(200).json(shoppingAgent);
+  // }
+  if(req.method === "GET") {
   const { category } = req.query;
 
   if (!category) {
